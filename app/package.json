@@ -1,0 +1,31 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/www.github.com/MarcelMangold.git"
+  },
+  "keywords": [
+    "Time",
+    "tracker"
+  ],
+  "author": "Marcel Mangold",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/www.github.com/MarcelMangold/issues"
+  },
+  "homepage": "https://github.com/www.github.com/MarcelMangold#readme",
+  "dependencies": {
+    "@types/pg": "^7.14.1",
+    "dotenv": "^8.2.0",
+    "pg": "^7.18.1",
+    "telegraf": "^3.36.0",
+    "telegraf-keyboard": "^1.1.2",
+    "winston": "^3.2.1"
+  }
+}
