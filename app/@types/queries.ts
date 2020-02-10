@@ -1,17 +1,6 @@
-export interface AccountBalanceDetails
+export interface Project
 {
-    id: number,
-    categoriename: string,
-    name: string,
-    amount: number,
-    ispositive: boolean,
-    timeStamp:Date
+    name:string
 }
 
-export interface AccountBalance
-{
-    month?: number,
-    spend: number,
-    income:number,
-    sum:number
-}
+

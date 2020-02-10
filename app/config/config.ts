@@ -11,8 +11,9 @@ let databaseConnection: DatabaseConnection = {
 }
 
 let botToken:string =process.env.BOT_TOKEN
+let emailAdress:string = process.env.EMAIL_ADRESS
 
 
 
 
-export{databaseConnection,botToken};
+export{databaseConnection,botToken, emailAdress};

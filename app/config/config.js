@@ -11,3 +11,5 @@ var databaseConnection = {
 exports.databaseConnection = databaseConnection;
 var botToken = process.env.BOT_TOKEN;
 exports.botToken = botToken;
+var emailAdress = process.env.EMAIL_ADRESS;
+exports.emailAdress = emailAdress;

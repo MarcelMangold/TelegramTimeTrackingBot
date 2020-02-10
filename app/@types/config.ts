@@ -4,4 +4,5 @@ export interface Config
 {
     databaseConnection:DatabaseConnection;
     botToken:string;
+    emailAdress:string;
 }
