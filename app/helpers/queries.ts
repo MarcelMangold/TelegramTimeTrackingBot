@@ -7,7 +7,8 @@ const queries = {
     'GET_PROJECTS': 'SELECT id,name FROM project WHERE userID = $1 AND chatId = $2;',
     'GET_ACTIVE_PROJECT': 'SELECT p.name FROM timetracker t INNER JOIN project p ON t.projectId = p.id WHERE t.isactive = true AND t.userId = $1 AND t.chatId = $2',
     'NEW_TIME': 'INSERT INTO timetracker (startTime, endTime, projectId, userId,chatId,isActive) VALUES(current_timestamp,current_timestamp, $1, $2,$3, true)',
-    'FINISH_TIME': 'UPDATE  timetracker SET endtime =now(), isactive=false WHERE userId = $1 AND chatId = $2 AND isactive = true;'
+    'FINISH_TIME': 'UPDATE  timetracker SET endtime =now(), isactive=false WHERE userId = $1 AND chatId = $2 AND isactive = true;',
+    'GET_ALL_PROJECTS_INFORMATION': 'SELECT  p.name, SUM(t.endtime-t.starttime) FROM timetracker t INNER JOIN project p ON t.projectId = p.id WHERE t.userId= $1 AND t.chatId=$2 GROUP BY p.id;'
 }
 
 

@@ -74,7 +74,7 @@ var newProject = new WizardScene("new_project", function (ctx) {
                 return [4 /*yield*/, database_adapter_1.executeQuery(queries_1.queries.INSERT_PROJECT, [ctx.message.text, "", userId, chatId])];
             case 3:
                 _a.sent();
-                ctx.replyWithHTML("The project  <b>" + ctx.message.text + "</b> were added");
+                ctx.replyWithHTML("The project  <b>" + ctx.message.text + "</b> was added");
                 return [3 /*break*/, 5];
             case 4:
                 err_1 = _a.sent();
@@ -156,7 +156,7 @@ bot.command('end_time', function (ctx) { return __awaiter(void 0, void 0, void 0
             case 3:
                 updateResult = _a.sent();
                 if (updateResult.rowCount > 0 && activeProjectResult.rowCount == 1)
-                    ctx.replyWithHTML("The time tracker finished the project " + activeProjectResult.rows[0].name);
+                    ctx.replyWithHTML("The time tracker finished the project <b>" + activeProjectResult.rows[0].name + "</b>");
                 else if (activeProjectResult.rowCount > 0)
                     ctx.replyWithHTML("There are more than one project open... please write a mail to " + emailAdress);
                 else
@@ -174,9 +174,43 @@ bot.command('end_time', function (ctx) { return __awaiter(void 0, void 0, void 0
 }); });
 bot.command('projectInformations', function (ctx) {
 });
+bot.command('projects_information', function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, chatId, result, text_2, err_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = ctx.message.from.id;
+                chatId = ctx.message.chat.id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, database_adapter_1.executeQuery(queries_1.queries.GET_ALL_PROJECTS_INFORMATION, [userId, chatId])];
+            case 2:
+                result = _a.sent();
+                if (result.rowCount > 0) {
+                    text_2 = 'Projectinformation: ';
+                    result.rows.forEach(function (project) {
+                        text_2 += "\n" + project.name + " - " + formatTime(project.sum.hours + project.sum.days * 24) + ":" + formatTime(project.sum.minutes) + ":" + formatTime(project.sum.seconds);
+                    });
+                    ctx.replyWithHTML(text_2);
+                }
+                else {
+                    ctx.replyWithHTML("There are no projects.");
+                }
+                return [3 /*break*/, 4];
+            case 3:
+                err_4 = _a.sent();
+                console.log(err_4);
+                logger_1.logger.error(err_4);
+                ctx.replyWithHTML("Error while finishing time tracking");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
 var regex = new RegExp('action[0-9]-start_time');
 bot.action(regex, function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var actionData, err_4;
+    var actionData, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -190,8 +224,8 @@ bot.action(regex, function (ctx) { return __awaiter(void 0, void 0, void 0, func
                 ctx.replyWithHTML("The time tracker for the project<b> " + actionData.replace("action", "").split("-")[2] + "</b> is active", Extra.markup(Markup.removeKeyboard()));
                 return [3 /*break*/, 4];
             case 3:
-                err_4 = _a.sent();
-                logger_1.logger.error(err_4);
+                err_5 = _a.sent();
+                logger_1.logger.error(err_5);
                 ctx.replyWithHTML("Error while starting time tracking");
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -262,6 +296,13 @@ function getProjectsInKeyboard(userId, chatId, kindOfKeyboard) {
             }
         });
     });
+}
+function formatTime(time) {
+    if (time === undefined || isNaN(time))
+        return "00";
+    else {
+        return (time < 10 ? '0' : '') + time;
+    }
 }
 function addChatAndUserIfNotExist(chatId, userId) {
     return __awaiter(this, void 0, void 0, function () {

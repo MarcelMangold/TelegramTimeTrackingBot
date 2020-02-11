@@ -4,7 +4,7 @@ import { executeQuery } from './helpers/database-adapter';
 import { queries } from './helpers/queries';
 import { logger } from './helpers/logger';
 import { QueryResult, Query } from 'pg';
-import { Project } from './@types/queries';
+import { Project , ProjectsInformation} from './@types/queries';
 
 const Telegraf = require('telegraf');
 const session = Telegraf.session;
@@ -44,7 +44,7 @@ const newProject = new WizardScene(
             ctx.replyWithHTML(
                 `The project  <b>${
                 ctx.message.text
-                }</b> were added`
+                }</b> was added`
             );
         }
         catch (err) {
@@ -113,13 +113,37 @@ bot.command('end_time', async (ctx) =>
         logger.error(err);
         ctx.replyWithHTML(`Error while finishing time tracking`);
     }  
-
 })
 
 
 bot.command('projectInformations', (ctx) =>
 {
 
+})
+
+bot.command('projects_information',async ctx => {
+    let userId = ctx.message.from.id;
+    let chatId = ctx.message.chat.id;
+
+    try {
+        let result:QueryResult = await executeQuery(queries.GET_ALL_PROJECTS_INFORMATION, [userId, chatId]);
+        if(result.rowCount > 0)
+        {
+            let text:string = 'Projectinformation: '
+            result.rows.forEach((project:ProjectsInformation) => {
+                text += `\n${project.name} - ${formatTime(project.sum.hours + project.sum.days*24)}:${formatTime(project.sum.minutes)}:${formatTime(project.sum.seconds)}`
+            });
+            ctx.replyWithHTML(text);
+        }
+        else
+        {
+            ctx.replyWithHTML(`There are no projects.`)
+        }
+    } catch (err) {
+        console.log(err);
+        logger.error(err);
+        ctx.replyWithHTML(`Error while finishing time tracking`);
+    }  
 })
 
 
@@ -185,6 +209,16 @@ async function getProjectsInKeyboard(userId: number, chatId:number, kindOfKeyboa
 
         });
         return keyboard;
+    }
+}
+
+function formatTime(time:number):string
+{
+    if(time === undefined || isNaN(time))
+        return "00";
+    else
+    {
+        return (time < 10 ? '0' : '') + time;
     }
 }
 
